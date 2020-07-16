@@ -1,0 +1,37 @@
+# Staging values for strimzi-camel-kafka-connector.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  namespace: <namespace>
+  kafkaconnectname: emd-kafka-cluster
+  assumerolename: arn:aws:iam::<>:role
+  replicaCount: 1
+  loglevel: INFO
+  kafkaserver:
+    hostname: <servername>
+    port: 9092
+    username: <username>
+    password: <password>
+    tlscert: <cert>
+
+  image:
+    repository: <imagename>
+    tag: "1.0.0"
+  config:
+    groupid: emdconsumer-group-4
+    offsettopic: connect-offsets
+    configtopic: connect-configs
+    statustopic: connect-status
+
+s3:
+  bucket: aws2-s3://<bucketname>
+  subfolders: ${date:now:yyyy-MM-dd}/${date:now:HH}/${date:now:yyyyMMdd-HHmmssSSS}
+  classname: org.apache.camel.kafkaconnector.CamelSinkConnector
+  tasks: 1
+
+firehose:
+  classname: org.apache.camel.kafkaconnector.aws2kinesisfirehose.CamelAws2kinesisfirehoseSinkConnector
+  tasks: "10"
+
+converter: org.apache.kafka.connect.storage.StringConverter

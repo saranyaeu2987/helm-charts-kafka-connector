@@ -1,0 +1,17 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: sample-s3-connector
+  namespace: {{ .Values.global.namespace}}
+  labels:
+    strimzi.io/cluster: {{ .Values.global.kafkaconnectname }}
+spec:
+  class: {{ .Values.s3.classname }}
+  tasksMax: {{ .Values.s3.tasks }}
+  config:
+    key.converter: {{ .Values.converter }}
+    value.converter: {{ .Values.converter }}
+    topics: <topic-name>
+    camel.sink.url: {{ .Values.s3.bucket }}?keyName=test-topic-name/{{ .Values.s3.subfolders }}
+    camel.component.aws2-s3.configuration.autocloseBody: false
+    camel.component.aws2-s3.useIAMCredentials: true

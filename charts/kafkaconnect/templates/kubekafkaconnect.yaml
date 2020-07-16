@@ -1,0 +1,36 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaConnect
+metadata:
+  name: {{ .Values.global.kafkaconnectname }}
+  namespace: {{ .Values.global.namespace}}
+  annotations:
+    strimzi.io/use-connector-resources: "true"
+spec:
+  image: {{ .Values.global.image.repository}}:{{ .Values.global.image.tag}}
+  logging:
+    type: inline
+    loggers:
+      connect.root.logger.level: {{ .Values.global.loglevel | quote }}
+  replicas: {{ .Values.global.replicaCount}}
+  bootstrapServers: {{ .Values.global.kafkaserver.hostname}}:{{ .Values.global.kafkaserver.port}}
+  authentication:
+    type: plain
+    username: {{ .Values.global.kafkaserver.username}}
+    passwordSecret:
+      secretName: {{ .Values.secretnames.authpassword }}
+      password: password
+  tls:
+    trustedCertificates:
+      - secretName: {{ .Values.secretnames.certificate }}
+        certificate: cert.crt
+  config:
+    group.id: {{ .Values.global.config.groupid }}
+    offset.storage.topic: {{ .Values.global.config.offsettopic }}
+    config.storage.topic: {{ .Values.global.config.configtopic }}
+    status.storage.topic: {{ .Values.global.config.statustopic }}
+    config.providers: file
+    config.providers.file.class: org.apache.kafka.common.config.provider.FileConfigProvider
+    key.converter: org.apache.kafka.connect.json.JsonConverter
+    value.converter: org.apache.kafka.connect.json.JsonConverter
+    key.converter.schemas.enable: false
+    value.converter.schemas.enable: false

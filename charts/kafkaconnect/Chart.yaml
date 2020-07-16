@@ -1,0 +1,6 @@
+apiVersion: v2
+name: strimzi-kafka-connect
+description: A Helm chart for Kubernetes version of strimzi-kafka-connect
+type: application
+version: 0.1.0
+appVersion: 1.0.0

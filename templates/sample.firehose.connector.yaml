@@ -1,0 +1,16 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: sample-firehose-connector
+  namespace: {{ .Values.global.namespace}}
+  labels:
+    strimzi.io/cluster: {{ .Values.global.kafkaconnectname }}
+spec:
+  class: {{ .Values.firehose.classname }}
+  tasksMax: {{ .Values.firehose.tasks }}
+  config:
+    key.converter: {{ .Values.converter }}
+    value.converter: {{ .Values.converter }}
+    topics: <topic-name>
+    camel.sink.path.streamName: <firehose-name>
+    errors.log.enable: true

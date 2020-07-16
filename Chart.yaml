@@ -1,0 +1,6 @@
+apiVersion: v2
+name: strimzi-camel-kafka-connector
+description: A Helm chart for Kubernetes version of Strimzi Camel Kafka Connector
+type: application
+version: 0.1.0
+appVersion: 1.0.0
